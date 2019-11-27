@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static controller.Universal.logTextArea;
+
 public class  GUI  extends JFrame {
 
     //Grid Layout
@@ -17,7 +19,7 @@ public class  GUI  extends JFrame {
     private JLabel labelSelect = new JLabel("Select Angel");
     private JLabel labelStats = new JLabel("Statistics");
     private JLabel labelInput = new JLabel("Name");
-    private JLabel picLabel;
+    private JLabel picLabel = new JLabel();
 
     private JPanel panelCreate = new JPanel();
     private JPanel panelSelect = new JPanel();
@@ -66,7 +68,8 @@ public class  GUI  extends JFrame {
 
     public GUI() {
         setTitle("Swingy");
-        setSize(1000, 1000);
+//        setBackground(Color.black);
+        setSize(800, 800);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -99,5 +102,17 @@ public class  GUI  extends JFrame {
         panelMain.add(panelMenu, BorderLayout.CENTER);
 
         window.setContentPane(panelMain);
+    }
+
+    private void initialise(GUI window) {
+        logTextArea = new JTextArea("", 50, 25);
+        logTextArea.setEditable(false);
+        scrollPane = new JScrollPane(logTextArea);
+
+//        ((GridLayout)panelMap.getLayout()).setVgap(0);
+        ((FlowLayout)panelMap.getLayout()).setVgap(0);
+
+//        BufferedImage img = ImageIO.read(url);
+//        BufferedImage mainImage = view.images;
     }
 }
