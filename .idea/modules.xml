@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/swingy.iml" filepath="$PROJECT_DIR$/swingy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swingy_wtc.iml" filepath="$PROJECT_DIR$/swingy_wtc.iml" />
     </modules>
   </component>
 </project>
