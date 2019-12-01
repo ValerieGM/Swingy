@@ -1,9 +1,8 @@
-package controller;
+package model;
 
 import javax.swing.*;
 import javax.validation.ValidatorFactory;
 
-import model.artifacts.*;
 import model.entities.angels.Angel;
 import model.entities.demons.Demon;
 import view.*;
@@ -19,7 +18,6 @@ public class Universal {
 
     public static Angel angel;
     public static Demon demon;
-    public static Artifact artifact;
     public static SquareMap squareMap;
     public static JTextArea logTextArea;
 

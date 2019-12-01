@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.Random;
 import java.util.Scanner;
 
-import static controller.Universal.*;
+import static model.Universal.*;
 
 public class GameManager {
     private static int north = 1;

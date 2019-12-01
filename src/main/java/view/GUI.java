@@ -1,15 +1,10 @@
 package view;
 
-import sun.swing.ImageIconUIResource;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import static controller.Universal.logTextArea;
+import static model.Universal.logTextArea;
 
 public class  GUI  extends JFrame {
 
@@ -24,6 +19,7 @@ public class  GUI  extends JFrame {
     private JLabel labelSelect = new JLabel("Select Angel");
     private JLabel labelStats = new JLabel("Statistics");
     private JLabel labelInput = new JLabel("Name");
+    private JLabel labelAction = new JLabel("Action");
     private JLabel picLabel = new JLabel();
 
     private JPanel panelCreate = new JPanel();
@@ -49,6 +45,7 @@ public class  GUI  extends JFrame {
     private JPanel panelMap = new JPanel();
     private JPanel panelGrid = new JPanel();
     private JPanel panelStats = new JPanel();
+    private JPanel panelInput = new JPanel();
 
     //Text Fields
     private JTextField input = new JTextField();
@@ -58,13 +55,13 @@ public class  GUI  extends JFrame {
     private JRadioButton rNo = new JRadioButton("No");
 
     private JButton buttonChange = new JButton("Console View");
-    private JButton buttonOk = new JButton("OK");
+    private JButton buttonOkEncounter = new JButton("OK");
 
     //Scrolling Capabilities
     private JScrollPane scrollPane;
 
     //Images To Be Used
-    private Image scaled;
+    private Image scaledImage;
     private BufferedImage lilithImage;
     private BufferedImage draculaImage;
     private BufferedImage archangelImage;
@@ -110,7 +107,7 @@ public class  GUI  extends JFrame {
     }
 
     private void initialise(GUI window) {
-        logTextArea = new JTextArea("", 30, 25);
+        logTextArea = new JTextArea("", 40, 25);
         logTextArea.setEditable(false);
         scrollPane = new JScrollPane(logTextArea);
 
@@ -118,23 +115,15 @@ public class  GUI  extends JFrame {
         ((FlowLayout)panelMap.getLayout()).setVgap(0);
 
         //Reading Image Files::  BufferedImage img = ImageIO.read(url);
-        BufferedImage mainImage;
-        try {
-            mainImage = ImageIO.read(new File("src/main/java/view/images/game.png"));
-            archangelImage = ImageIO.read(new File("src/main/java/view/images/archangel.png"));
-            seraphImage = ImageIO.read(new File("src/main/java/view/images/seraph.png"));
-            cherubImage = ImageIO.read(new File("src/main/java/view/images/cherub.png"));
-            draculaImage = ImageIO.read(new File("src/main/java/view/images/dracula.png"));
-            lilithImage = ImageIO.read(new File("src/main/java/view/images/lilith.png"));
+        BufferedImage mainImage = controller.ImageException.imageUpload("src/main/java/view/images/game.png");
+        archangelImage = controller.ImageException.imageUpload("src/main/java/view/images/archangel.png");
+        seraphImage = controller.ImageException.imageUpload("src/main/java/view/images/seraph.png");
+        cherubImage = controller.ImageException.imageUpload("src/main/java/view/images/cherub.png");
+        draculaImage = controller.ImageException.imageUpload("src/main/java/view/images/dracula.png");
+        lilithImage = controller.ImageException.imageUpload("src/main/java/view/images/lilith.png");
+        scaledImage = mainImage.getScaledInstance(window.getWidth() / 2, window.getHeight(),Image.SCALE_DEFAULT );
+        picLabel = new JLabel(new ImageIcon(scaledImage));
 
-            scaled = mainImage.getScaledInstance(window.getWidth() / 2, window.getHeight(),Image.SCALE_DEFAULT );
-            picLabel = new JLabel(new ImageIcon(scaled));
-        } catch (IOException e) {
-            System.out.println("Unable To Read Image");
-            System.exit(0);
-        }
-
-        //????????????????????????????????????
         //Panel Initialisations
         panelMenu.setPreferredSize(new Dimension(window.getWidth() / 4, window.getHeight()));
         panelMenu.setBackground(Color.DARK_GRAY);
@@ -143,7 +132,82 @@ public class  GUI  extends JFrame {
         panelGrid.setPreferredSize(new Dimension(window.getWidth() / 2, window.getHeight()));
         panelGrid.setBackground(Color.DARK_GRAY);
 
+        listCreate.addItem("Archangel");
+        listCreate.addItem("Seraph");
+        listCreate.addItem("Cherub");
+//        listCreate.addActionListener(new listListener());
+        listCreate.setPreferredSize(new Dimension(180, 50));
+        listSelect.setPreferredSize(new Dimension(180, 50));
+
         //Button Initialisations
-        buttonCreate.setPreferredSize(new Dimension(600, 90));
+        buttonCreate.setPreferredSize(new Dimension(180, 90));
+//        buttonCreate.addActionListener(new createListener());
+        buttonSelect.setPreferredSize(new Dimension(180, 90));
+//        buttonSelect.addActionListener(new selectListener());
+        buttonChange.setPreferredSize(new Dimension(180, 90));
+//        buttonChange.addActionListener(new changeListener());
+
+        buttonCreate2.setPreferredSize(new Dimension(180, 30));
+//        buttonCreate2.addActionListener(new angelCreateListener());
+        buttonCreate2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonCreate2.setMaximumSize(getSize());
+
+        buttonOkEncounter.setPreferredSize(new Dimension(180, 30));
+//        buttonOkEncounter.addActionListener(new angelEncounterListener());
+        buttonOkEncounter.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonOkEncounter.setMaximumSize(getSize());
+
+        buttonFlee.setPreferredSize(new Dimension(180, 30));
+//        buttonFlee.addActionListener(new fleeListener());
+        buttonFlee.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonFlee.setMaximumSize(getSize());
+
+        buttonDelete.setPreferredSize(new Dimension(180, 30));
+//        buttonDelete.addActionListener(new deleteAngelListener());
+        buttonDelete.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonDelete.setMaximumSize(getSize());
+        buttonDelete.setForeground(Color.red);
+
+        buttonCancel.setPreferredSize(new Dimension(180, 30));
+//        buttonCancel.addActionListener(new cancelListener());
+        buttonCancel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonCancel.setMaximumSize(getSize());
+
+        buttonCancelMain.setPreferredSize(new Dimension(180, 30));
+//        buttonCancelMain.addActionListener(new cancelMainListener());
+        buttonCancelMain.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonCancel.setMaximumSize(getSize());
+
+        labelCreate.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelSelect.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelAction.setAlignmentX(Component.CENTER_ALIGNMENT);
+        input.setPreferredSize(new Dimension(160, 55));
+
+        Box box = Box.createVerticalBox();
+        panelStats.setPreferredSize(new Dimension(250, 150));
+        labelStats.setAlignmentX(Component.CENTER_ALIGNMENT);
+        box.add(labelStats);
+        panelStats.add(box);
+        panelStats.setVisible(false);
+        panelInput.add(labelInput);
+        panelInput.add(input);
+
+        panelCreate.setPreferredSize(new Dimension(300, 200));
+        panelCreate.setLayout(new BoxLayout(panelCreate, BoxLayout.Y_AXIS));
+        panelCreate.add(labelCreate);
+        panelCreate.add(listCreate);
+        panelCreate.add(panelInput);
+        panelCreate.add(buttonCreate2);
+        panelCreate.setVisible(false);
+        listCreate.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panelSelect.setPreferredSize(new Dimension(300, 200));
+        panelSelect.setLayout(new BoxLayout(panelSelect, BoxLayout.Y_AXIS));
+        panelSelect.add(labelSelect);
+        panelSelect.add(listSelect);
+        panelSelect.add(buttonFlee);
+        panelSelect.add(buttonDelete);
+        panelSelect.setVisible(false);
+        listSelect.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 }

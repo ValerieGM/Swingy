@@ -1,13 +1,8 @@
 package controller;
 
-import javax.validation.*;
-import java.util.*;
-
 import model.entities.Entity;
 import model.entities.angels.*;
 import model.entities.demons.*;
-
-import static controller.Universal.factory;
 
 public class EntityFactory {
     private static Entity entity;

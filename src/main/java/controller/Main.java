@@ -5,7 +5,7 @@ import view.GUI;
 
 //import java.sql.SQLException;
 
-import static controller.Universal.bIsGUI;
+import static model.Universal.bIsGUI;
 
 public class Main {
     public static void main(String[] args) {

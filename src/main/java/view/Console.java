@@ -9,7 +9,7 @@ import model.entities.angels.Angel;
 import java.sql.SQLException;
 import java.util.*;
 
-import static controller.Universal.*;
+import static model.Universal.*;
 import static view.Display.*;
 
 public class Console {
