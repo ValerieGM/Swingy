@@ -57,7 +57,7 @@ public class Database {
                     " WHERE " + dbName + " =?";
 
     private static final String deleteAngelTable =
-            String.format("DELETE * FROM%sWHERE%s = ?", angelTable, dbName);
+            "DELETE from " + angelTable + " WHERE " + dbName + " = ?";
 
     private static final String sqlDriver = "org.sqlite.JDBC";
     private static final String sqlURL = "jdbc:sqlite:" + databaseName;
