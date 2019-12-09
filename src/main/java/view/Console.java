@@ -33,6 +33,11 @@ public class Console {
                     selectAngel();
                     break;
                 }
+                else if (v == 3) {
+                    bIsGUI = true;
+                    GUI gui = new GUI();
+                    break;
+                }
                 else {
                     System.out.println("Goodbye!!!");
                     break;

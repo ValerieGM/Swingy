@@ -4,7 +4,8 @@ public class Display {
     public static void displayMenu() {
         System.out.println("1) Create Angel");
         System.out.println("2) Select Angel");
-        System.out.println("3) Exit");
+        System.out.println("3) Graphical Window");
+        System.out.println("4) Exit");
     }
 
     public static void displayAngel() {
