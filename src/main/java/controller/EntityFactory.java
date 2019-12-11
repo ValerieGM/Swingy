@@ -16,17 +16,7 @@ public class EntityFactory {
             entity = new Cherub(name);
 
         System.out.println("All created:::::");
-
-//        Validator validator = factory.getValidator();
-
-//        Set<ConstraintViolation<Entity>> constraintViolations = validator.validate(entity);
-//        if (constraintViolations.size() > 0) {
-//            for (ConstraintViolation<Entity> constraint : constraintViolations)
-//                System.out.println(constraint.getMessage());
-//            return null;
-//        }
-//        else
-            return (entity);
+        return (entity);
     }
 
     public static Entity newDemon(Entity angel, String type) {

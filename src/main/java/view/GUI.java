@@ -1,6 +1,7 @@
 package view;
 
 import controller.EntityFactory;
+import controller.GameManager;
 import controller.MapFactory;
 import jdk.nashorn.internal.scripts.JO;
 import model.database.Database;
@@ -12,6 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 import java.util.List;
@@ -254,72 +257,68 @@ public class  GUI  extends JFrame {
         while (v < squareMap.getMapSize()) {
             int t = 0;
             while (t < squareMap.getMapSize()) {
-                int x = t;
-                int y = v;
+                final int x = t;
+                final int y = v;
                 int position = squareMap.getMap()[t][v];
 
                 final JPanel block = new JPanel();
                 ((FlowLayout)block.getLayout()).setHgap(0);
                 ((FlowLayout)block.getLayout()).setVgap(0);
                 block.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-                if (position == 1) {
+                if (position == 1)
                     block.setBackground(new Color(70, 196, 222));
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (angel.getType() == "Archangel")
-                                scaledImage = archangelImage.getScaledInstance(block.getWidth(), block.getHeight(), Image.SCALE_DEFAULT);
-                            else if (angel.getType() == "Seraph")
-                                scaledImage = seraphImage.getScaledInstance(block.getWidth(), block.getHeight(), Image.SCALE_DEFAULT);
-                            else if (angel.getType() == "Cherub")
-                                scaledImage = cherubImage.getScaledInstance(block.getWidth(), block.getHeight(), Image.SCALE_DEFAULT);
-
-                            if (scaledImage != null) {
-                                JLabel pic = new JLabel(new ImageIcon(scaledImage));
-                                block.add(pic);
-                                block.setSize(block.getWidth(), block.getHeight());
-//                                pack();
-                            }
-                            else
-                                System.out.println("Oops:: Angel Image Unable To Load");
-                        }
-                    });
-                }
-                else if (position == 2) {
+                else if (position == 2)
                     block.setBackground(new Color(72, 61, 139));
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            scaledImage = draculaImage.getScaledInstance(block.getWidth(), block.getHeight(), Image.SCALE_DEFAULT);
-                            if (scaledImage != null) {
-                                JLabel pic = new JLabel(new ImageIcon(scaledImage));
-                                block.add(pic);
-//                                pack();
-                            }
-                            else
-                                System.out.println("Oops:: Angel Image Unable To Load");
-                        }
-                    });
-                }
-                else if (position == 8){
-                    block.setBackground(new Color(143, 188, 143));
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            scaledImage = battlefield.getScaledInstance(block.getWidth(), block.getHeight(), Image.SCALE_DEFAULT);
-                            if (scaledImage != null) {
-                                JLabel pic = new JLabel(new ImageIcon(scaledImage));
-                                block.add(pic);
-//                                pack();
-                            }
-                            else
-                                System.out.println("Oops:: Angel Image Unable To Load");
-                        }
-                    });
-                }
+                else if (position == 8)
+                    block.setBackground(new Color(101, 7, 64));
                 else
                     block.setBackground(new Color(230, 230, 250));
                 panelGrid.add(block);
+
+                block.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if ((x + 1) < squareMap.getMapSize() && squareMap.getMap()[x + 1][y] == 1)
+                            GameManager.move(1);
+                        else if ((y - 1) >= 0 && squareMap.getMap()[x][y - 1] == 1)
+                            GameManager.move(2);
+                        else if ((x - 1) <= 0 && squareMap.getMap()[x - 1][y] == 1)
+                            GameManager.move(3);
+                        else if ((y + 1) < squareMap.getMapSize() && squareMap.getMap()[x][y + 1] == 1)
+                            GameManager.move(4);
+
+                        panelGrid.removeAll();
+                        grid.setRows(squareMap.getMapSize());
+                        grid.setColumns(squareMap.getMapSize());
+                        grid.setHgap(-1);
+                        grid.setVgap(-1);
+                        panelGrid.setLayout(grid);
+                        map();
+                        panelGrid.revalidate();
+                        panelGrid.repaint();
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+
+                    }
+                });
+
                 t++;
             }
             v++;

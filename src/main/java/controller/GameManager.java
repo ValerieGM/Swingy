@@ -69,12 +69,16 @@ public class GameManager {
             }
         }
 
-        if (angel.getHp() <= 0)
+        if (angel.getHp() <= 0) {
             System.out.println("Quest Failed!!!");
+            if (!bIsGUI)
+                Console.begin();
+        }
         else if (demon.getHp() <= 0) {
             Database.getInstance().updateAngel(angel);
             angel.setPosition(0, 0);
-            System.out.println("Quest Success!!!!");
+            System.out.println("" +
+                    "Quest Success!!!!");
         }
     }
 
