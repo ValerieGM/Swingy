@@ -14,8 +14,6 @@ public class EntityFactory {
             entity = new Seraph(name);
         else if (type.equals("Cherubim"))
             entity = new Cherub(name);
-
-        System.out.println("All created:::::");
         return (entity);
     }
 

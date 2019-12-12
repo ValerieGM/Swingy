@@ -14,7 +14,7 @@ import static view.Display.*;
 
 public class Console {
 
-    public static void begin() throws SQLException {
+    public static void begin() {
         bIsGUI = false;
         System.out.println("******Console View******");
         displayMenu();
@@ -50,7 +50,7 @@ public class Console {
         input.close();
     }
 
-    private static void createAngel() throws SQLException {
+    private static void createAngel() {
         Display.displayAngel();
         Scanner input = new Scanner(System.in);
         while (input.hasNextLine()) {
@@ -73,7 +73,7 @@ public class Console {
         Display.displayMenu();
     }
 
-    public static void nameAngel(String type) throws SQLException {
+    public static void nameAngel(String type) {
         System.out.println("Name Your Angel::");
         Scanner input = new Scanner(System.in);
         while (input.hasNextLine()) {
@@ -87,7 +87,7 @@ public class Console {
         }
     }
 
-    private static void selectAngel() throws SQLException {
+    private static void selectAngel() {
         System.out.println("Select Your Angel::");
         Database.getInstance().printDatabase();
         if (bIsAngel) {

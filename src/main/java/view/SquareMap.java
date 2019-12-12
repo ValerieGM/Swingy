@@ -33,7 +33,7 @@ public class SquareMap {
             displayMap();
     }
 
-    public void displayMap() {
+    private void displayMap() {
         for (int[] line: map) {
             for (int col : line) {
                 String box = col + " ";

@@ -19,7 +19,7 @@ public class Main {
                 bIsGUI = true;
                 GUI gui = new GUI();
             }
-        } catch (ArrayIndexOutOfBoundsException | SQLException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Let's add console or gui alright?!?!?!?");
         }
     }

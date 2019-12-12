@@ -1,20 +1,18 @@
 package controller;
 
-import model.database.Database;
+import model.entities.demons.Demon;
+import model.entities.demons.Dracula;
 import view.Console;
 import view.Display;
+import model.database.Database;
 
-import java.sql.SQLException;
+import static controller.EntityFactory.newDemon;
+import static model.Universal.*;
+
 import java.util.Random;
 import java.util.Scanner;
 
-import static model.Universal.*;
-
 public class GameManager {
-    private static int north = 1;
-    private static int east = 2;
-    private static int south = 3;
-    private static int west = 4;
 
     private static int[] oldMove = new int[2];
 
@@ -29,15 +27,16 @@ public class GameManager {
         }
     }
 
-    public static void battleOrFlee() throws SQLException {
+    public static void battleOrFlee() {
         if (!bIsGUI)
             Display.displaySurvival();
         Scanner input = new Scanner(System.in);
         if (!bIsGUI) {
             while (input.hasNextLine()) {
                 String takeIn = input.nextLine();
-                if (takeIn.equals(1) || takeIn.equals(2)) {
-                    if (takeIn.equals(1)) {
+                Integer v  = Integer.getInteger(takeIn);
+                if (v.equals(1) || v.equals(2)) {
+                    if (v.equals(1)) {
                         battle(2);
                         return;
                     } else {
@@ -49,10 +48,11 @@ public class GameManager {
                     Display.displaySurvival();
                 }
             }
-        } else bEncounterPhase = true; //experiment with that too
+        } else
+            bEncounterPhase = true; //experiment with that too
     }
 
-    public static void battle(int v) throws SQLException {
+    public static void battle(int v) {
         if (v == 1 ) {
             while (angel.getHp() > 0 && demon.getHp() > 0) {
                 demon.attack(angel);
@@ -82,7 +82,7 @@ public class GameManager {
         }
     }
 
-    public static void flee() throws SQLException {
+    public static void flee() {
         int rand = new Random().nextInt(2);
         if (rand == 1) {
             System.out.println("Nowhere To Run!!!");
@@ -95,6 +95,11 @@ public class GameManager {
     }
 
     public static void move(int way) {
+        int north = 1;
+        int east = 2;
+        int south = 3;
+        int west = 4;
+
         if (way == north) { //-10
             angel.setPosition(-1, 0);
             oldMove[0] = -1;
@@ -115,6 +120,21 @@ public class GameManager {
 
         // battle or flee
         if (squareMap.getMap()[angel.getX()][angel.getY()] == 8) {
+            bFightPhase = true;
+            int ran = new Random().nextInt(3);
+            if (ran == 3)
+                demon = (Demon) newDemon(angel, "Dracula");
+            else
+                demon = (Demon) newDemon(angel, "Lilith");
+            System.out.println("");
+            battleOrFlee();
         }
+//        if (squareMap.getMap()[hero.getX()][hero.getY()] == 8) {
+//            bFightPhase = true;
+//            int random = new Random().nextInt(3);
+//            foe = (Foe) newFoe((random == 2) ? EType.RAT : EType.BAT, hero);
+//            Logger.print("Enemy encounter : \"" + foe.getName() + "\" level " + foe.getLevel() + " !");
+//            fightOrRun();
+//        }
     }
 }

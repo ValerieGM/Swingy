@@ -7,8 +7,6 @@ import java.util.List;
 import controller.EntityFactory;
 import model.entities.angels.*;
 
-import javax.xml.crypto.Data;
-
 public class Database {
 
     //database variables
@@ -24,11 +22,6 @@ public class Database {
     private static final String dbHP = "hp";
     public static Boolean angelExists = false;
     public static int angelCount;
-
-    //optional
-    //private static String dbWeapon = "weapon";
-    //private static String dbArmor = "armor";
-    //private static String dbHelm = "helm";
 
     private static final String createAngelTable =
             "CREATE TABLE IF NOT EXISTS " + angelTable +
@@ -80,7 +73,7 @@ public class Database {
         return (database);
     }
     //connect to database
-    private Connection dbConnect() throws SQLException {
+    private Connection dbConnect() {
         connection = null;
         try {
             Class.forName(sqlDriver);
@@ -91,14 +84,12 @@ public class Database {
         } catch(Exception e) {
             System.err.println("dbConnect:: " + e.getClass().getName() + " : " + e.getMessage());
             System.exit(0);
-        }finally {
-            statement.close();
         }
         return (connection);
     }
 
     //insert into database
-    public void insertAngel(Angel angel) throws SQLException {
+    public void insertAngel(Angel angel) {
         System.out.println(angel);
         try {
             connection = this.dbConnect();
@@ -119,8 +110,6 @@ public class Database {
             }
         } catch (SQLException | IndexOutOfBoundsException e) { //IOException
             System.err.println("Insert:: SQLite Error: " + e.getMessage());
-        } finally {
-            prepared.close();
         }
     }
     //duplicate angels
@@ -135,7 +124,7 @@ public class Database {
     }
 
     //update angel
-    public void updateAngel(Angel angel) throws SQLException {
+    public void updateAngel(Angel angel) {
         try{
             connection = this.dbConnect();
             prepared = connection.prepareStatement(updateAngelTable);
@@ -150,14 +139,11 @@ public class Database {
         } catch (SQLException e) {
             System.out.println("UpdateAngel:: SQL Exception : " + e.getMessage());
             System.exit(0);
-        } finally {
-            prepared.close();
-            connection.close();
         }
     }
 
     //delete angel
-    public void deleteAngel(String input) throws SQLException {
+    public void deleteAngel(String input) {
         try {
             connection = this.dbConnect();
             prepared = connection.prepareStatement(deleteAngelTable);
@@ -167,14 +153,11 @@ public class Database {
         } catch (SQLException e) {
             System.out.println("Delete:: SQL exception : " + e.getMessage());
             System.exit(0);
-        } finally {
-            prepared.close();
-            connection.close();
         }
     }
 
     //print database
-    public void printDatabase() throws SQLException {
+    public void printDatabase() {
         try {
             StringBuilder string = new StringBuilder();
             connection = this.dbConnect();
@@ -196,14 +179,11 @@ public class Database {
         } catch (SQLException e) {
             System.out.println("PrintDB: " + e.getMessage());
             System.exit(0);
-        } finally {
-            statement.close();
-            resultSet.close();
         }
     }
 
     //extract angel details
-    public Angel angelDetails(String name) throws SQLException {
+    public Angel angelDetails(String name) {
         Angel angel = null;
         try {
             connection = this.dbConnect();
@@ -230,15 +210,12 @@ public class Database {
         }catch (SQLException e) {
             System.out.println("AngelDetails: " + e.getMessage());
             System.exit(0);
-        } finally {
-            prepared.close();
-            resultSet.close();
         }
         return angel;
     }
 
     //extract database
-    public List<Angel> extractDatabase() throws SQLException {
+    public List<Angel> extractDatabase() {
         try {
             List<Angel> angelList = new ArrayList<>();
 
@@ -270,9 +247,6 @@ public class Database {
         } catch (SQLException e) {
             System.out.println("ExtractDatabase: " + e.getMessage());
             System.exit(0);
-        } finally {
-            statement.close();
-            resultSet.close();
         }
         return null;
     }
