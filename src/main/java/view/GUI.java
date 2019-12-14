@@ -66,8 +66,6 @@ public class  GUI  extends JFrame {
     private JTextField input = new JTextField();
 
     //Generalized Button Options
-    private JRadioButton rYes = new JRadioButton("Yes");
-    private JRadioButton rNo = new JRadioButton("No");
     private JRadioButton rFlee = new JRadioButton("Flee");
     private JRadioButton rBattle = new JRadioButton("Battle");
 
@@ -80,16 +78,9 @@ public class  GUI  extends JFrame {
 
     //Images To Be Used
     private Image scaledImage;
-    private BufferedImage lilithImage;
-    private BufferedImage draculaImage;
-    private BufferedImage archangelImage;
-    private BufferedImage seraphImage;
-    private BufferedImage cherubImage;
-    private BufferedImage battlefield;
 
     public GUI() {
         setTitle("Swingy");
-//        setBackground(Color.black);
         setSize(1300, 800);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -134,12 +125,6 @@ public class  GUI  extends JFrame {
 
         //Reading Image Files::  BufferedImage img = ImageIO.read(url);
         BufferedImage mainImage = controller.ImageException.imageUpload("src/main/java/view/images/game.png");
-        archangelImage = controller.ImageException.imageUpload("src/main/java/view/images/archangel.png");
-        seraphImage = controller.ImageException.imageUpload("src/main/java/view/images/seraph.png");
-        cherubImage = controller.ImageException.imageUpload("src/main/java/view/images/cherub.png");
-        draculaImage = controller.ImageException.imageUpload("src/main/java/view/images/dracula.png");
-        lilithImage = controller.ImageException.imageUpload("src/main/java/view/images/lilith.png");
-        battlefield = controller.ImageException.imageUpload("src/main/java/view/images/battlefield.png");
         scaledImage = mainImage.getScaledInstance(window.getWidth() / 2 , window.getHeight(),Image.SCALE_DEFAULT );
         picLabel = new JLabel(new ImageIcon(scaledImage));
 
@@ -349,39 +334,29 @@ public class  GUI  extends JFrame {
 
     private class selectListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-//            if (!bIsAngel)
-//                logTextArea.setText("Angels Don't Exist");
-//            else {
+            if (!bIsAngel)
+                logTextArea.setText("Angels Don't Exist");
+            else {
                 panelCreate.remove(buttonCancel);
                 panelSelect.add(buttonCancel);
                 buttonCreate.setVisible(false);
                 buttonSelect.setVisible(false);
                 buttonChange.setVisible(false);
                 listSelect.removeAllItems();
-                try {
-                    List<Angel> angelList = Database.getInstance().extractDatabase();
-                    for (Angel a : angelList) {
-                        listSelect.addItem(a.getName());
-                    }
-                    panelSelect.setVisible(true);
-                    bIsAngel = false;
-                } catch (SQLException error) {
-                    System.out.println("selectListener:: " + error.getMessage());
-                    System.exit(0);
+                List<Angel> angelList = Database.getInstance().extractDatabase();
+                for (Angel a : angelList) {
+                    listSelect.addItem(a.getName());
                 }
-
-//            }
+                panelSelect.setVisible(true);
+                bIsAngel = false;
+            }
         }
     }
 
     private class changeListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 GUI.this.dispose();
-                try {
-                    Console.begin();
-                } catch (SQLException error) {
-                    System.out.println("ChangeListener:: " + error);
-                }
+                Console.begin();
             }
     }
 
@@ -397,12 +372,7 @@ public class  GUI  extends JFrame {
                 entity = EntityFactory.newAngel(input.getText(), "Cherub");
 
             if (entity != null) {
-                try {
-                    Database.getInstance().insertAngel((Angel) entity);
-                } catch (SQLException ex) {
-                    System.out.println("cancelListener:: " + ex.getMessage());
-                    System.exit(0);
-                }
+                Database.getInstance().insertAngel((Angel) entity);
                 panelCreate.setVisible(false);
                 buttonCreate.setVisible(true);
                 buttonSelect.setVisible(true);
@@ -415,12 +385,7 @@ public class  GUI  extends JFrame {
         public void actionPerformed(ActionEvent e) {
             panelSelect.setVisible(false);
             picLabel.setVisible(false);
-            try {
-                angel = Database.getInstance().angelDetails(listSelect.getSelectedItem().toString());
-            } catch (SQLException ex) {
-                System.out.println("startListener:: " + ex.getMessage());
-                System.exit(0);
-            }
+            angel = Database.getInstance().angelDetails(listSelect.getSelectedItem().toString());
             squareMap = MapFactory.generateMap(angel);
             System.out.println(angel.getName() + " is here!!!");
             grid.setRows(squareMap.getMapSize());
@@ -449,12 +414,8 @@ public class  GUI  extends JFrame {
             int selection = JOptionPane.showConfirmDialog(GUI.this, "Are you sure?!?!", "Death", option);
 
             if (selection == JOptionPane.YES_OPTION) {
-                try {
-                    Database.getInstance().deleteAngel(listCreate.getSelectedItem().toString());
-                    Database.getInstance().printDatabase();
-                } catch (SQLException ex) {
-                    System.out.println("deleteListener:: " + ex.getMessage());
-                }
+                Database.getInstance().deleteAngel(listCreate.getSelectedItem().toString());
+                Database.getInstance().printDatabase();
                 if (nbAngel == 0) {
                     panelSelect.setVisible(false);
                     buttonCreate.setVisible(true);
@@ -463,15 +424,10 @@ public class  GUI  extends JFrame {
                     bIsAngel = false;
                 } else {
                     listSelect.removeAllItems();
-                    try {
-                        List<Angel> angelList = Database.getInstance().extractDatabase();
-                        for (Angel a : angelList) {
-                            listSelect.addItem(a.getName());
-                        }
-                    } catch (SQLException ex) {
-                        System.out.println("innerDeleteListener:: " + ex.getMessage());
-                        System.exit(0);
-                    }
+                    List<Angel> angelList = Database.getInstance().extractDatabase();
+                       for (Angel a : angelList) {
+                           listSelect.addItem(a.getName());
+                       }
                 }
             }
         }

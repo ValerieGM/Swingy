@@ -21,7 +21,6 @@ public class GameManager {
                 angel.getX() == 0 || angel.getY() == 0) {
             System.out.println("Quest Complete!!!");
             squareMap = MapFactory.generateMap(angel);
-            //check what this section is for
             if (!bIsGUI)
                 Console.moveAngel();
         }
@@ -49,7 +48,7 @@ public class GameManager {
                 }
             }
         } else
-            bEncounterPhase = true; //experiment with that too
+            bEncounterPhase = true;
     }
 
     public static void battle(int v) {
@@ -89,7 +88,7 @@ public class GameManager {
             battle(1);
         } else if (rand == 2) {
             System.out.println("Cowardice!!!");
-            angel.setPosition(oldMove[0] * -1, oldMove[1] * -1); //experiment with that
+            angel.setPosition(oldMove[0] * -1, oldMove[1] * -1);
         }
         bFightPhase = false;
     }
@@ -129,12 +128,5 @@ public class GameManager {
             System.out.println("");
             battleOrFlee();
         }
-//        if (squareMap.getMap()[hero.getX()][hero.getY()] == 8) {
-//            bFightPhase = true;
-//            int random = new Random().nextInt(3);
-//            foe = (Foe) newFoe((random == 2) ? EType.RAT : EType.BAT, hero);
-//            Logger.print("Enemy encounter : \"" + foe.getName() + "\" level " + foe.getLevel() + " !");
-//            fightOrRun();
-//        }
     }
 }

@@ -7,6 +7,9 @@ import java.util.List;
 import controller.EntityFactory;
 import model.entities.angels.*;
 
+import static model.Universal.bIsAngel;
+import static model.Universal.nbAngel;
+
 public class Database {
 
     //database variables
@@ -20,8 +23,6 @@ public class Database {
     private static final String dbAttack = "attack";
     private static final String dbDefense = "defense";
     private static final String dbHP = "hp";
-    public static Boolean angelExists = false;
-    public static int angelCount;
 
     private static final String createAngelTable =
             "CREATE TABLE IF NOT EXISTS " + angelTable +
@@ -36,7 +37,7 @@ public class Database {
                     dbName + "," + dbType + "," +
                     dbLevel + "," + dbXP + "," +
                     dbAttack + "," + dbDefense + "," +
-                    dbHP + ")" + " VALUES(?,?,?,?,?,?,?)";
+                    dbHP + ") VALUES(?,?,?,?,?,?,?)";
 
     private  static final String updateAngelTable =
             String.format("UPDATE %sSET%s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, ",
@@ -64,7 +65,7 @@ public class Database {
 
     //Functions
 
-    //get instance of the database
+    //get instance of the database (synchronization look-up)
 
     public static Database getInstance() {
         if (database == null) {
@@ -74,15 +75,14 @@ public class Database {
     }
     //connect to database
     private Connection dbConnect() {
-        connection = null;
         try {
-            Class.forName(sqlDriver);
+            Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(sqlURL);
             statement = connection.createStatement();
             statement.executeUpdate(createAngelTable);
             System.out.println("Database Connection Created");
         } catch(Exception e) {
-            System.err.println("dbConnect:: " + e.getClass().getName() + " : " + e.getMessage());
+            System.err.println("dbConnect:: " + e.getMessage());
             System.exit(0);
         }
         return (connection);
@@ -163,9 +163,8 @@ public class Database {
             connection = this.dbConnect();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(getAngelTable);
-            angelCount = 0;
             while (resultSet.next()) {
-                angelExists = true;
+                bIsAngel = true;
                 string.append("Name: ").append(resultSet.getString(dbName)).append("\n")
                         .append("Type: ").append(resultSet.getString(dbType)).append("\n")
                         .append("Level: ").append(resultSet.getString(dbLevel)).append("\n")
@@ -173,10 +172,10 @@ public class Database {
                         .append("Attack: ").append(resultSet.getString(dbAttack)).append("\n")
                         .append("Defense: ").append(resultSet.getString(dbDefense)).append("\n")
                         .append("HP: ").append(resultSet.getString(dbHP)).append("\n");
-                angelCount += 1;
+                nbAngel += 1;
             }
             System.out.println(string.toString());
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("PrintDB: " + e.getMessage());
             System.exit(0);
         }
@@ -188,7 +187,6 @@ public class Database {
         try {
             connection = this.dbConnect();
             prepared = connection.prepareStatement(getAngelData);
-            System.out.println(dbName + "********************");
             prepared.setString(1, name);
             resultSet = prepared.executeQuery();
 
@@ -207,7 +205,7 @@ public class Database {
                 angel.setDefense(resultSet.getInt(dbDefense));
                 angel.setHp(resultSet.getInt(dbHP));
             }
-        }catch (SQLException e) {
+        }catch (Exception e) {
             System.out.println("AngelDetails: " + e.getMessage());
             System.exit(0);
         }
@@ -224,7 +222,7 @@ public class Database {
             resultSet = statement.executeQuery(getAngelTable);
 
             while (resultSet.next()) {
-                angelExists = true;
+                bIsAngel = true;
                 Angel angel = null;
                 if (resultSet.getString(dbType).equals("Archangel"))
                     angel = new Archangel();
@@ -244,7 +242,7 @@ public class Database {
                 angelList.add(angel);
             }
             return angelList;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("ExtractDatabase: " + e.getMessage());
             System.exit(0);
         }

@@ -10,7 +10,6 @@ import view.*;
 public class Universal {
     public static int nbAngel = 0;
 
-    public static Boolean bLootChoice = false;
     public static Boolean bFightPhase = false;
     public static Boolean bEncounterPhase = false;
     public static Boolean bIsGUI = false;
@@ -20,6 +19,4 @@ public class Universal {
     public static Demon demon;
     public static SquareMap squareMap;
     public static JTextArea logTextArea;
-
-    public static ValidatorFactory factory;
 }

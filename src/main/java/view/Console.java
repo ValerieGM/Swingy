@@ -1,13 +1,12 @@
 package view;
 
+import java.util.*;
+
 import controller.EntityFactory;
 import controller.GameManager;
 import controller.MapFactory;
 import model.database.Database;
 import model.entities.angels.Angel;
-
-import java.sql.SQLException;
-import java.util.*;
 
 import static model.Universal.*;
 import static view.Display.*;
@@ -21,8 +20,8 @@ public class Console {
         Scanner input = new Scanner(System.in);
         while (input.hasNextLine()) {
             String takeIn = input.nextLine();
-            if (takeIn.equals("1") || takeIn.equals("2") || takeIn.equals("3")) {
-                int v = Integer.parseInt(takeIn.trim());
+            Integer v = Integer.parseInt(takeIn);
+            if (v.equals(1) || v.equals(2) || v.equals(3)) {
                 if (v == 1) {
                     //create hero
                     createAngel();
@@ -55,8 +54,8 @@ public class Console {
         Scanner input = new Scanner(System.in);
         while (input.hasNextLine()) {
             String takeIn = input.nextLine();
-            if (takeIn.equals("1") || takeIn.equals("2") || takeIn.equals("3")) {
-                int v = Integer.parseInt(takeIn.trim());
+            Integer v = Integer.parseInt(takeIn);
+            if (v.equals(1) || v.equals(2) || v.equals(3)) {
                 if (v == 1)
                     nameAngel("Seraph");
                 else if (v == 2)
@@ -90,7 +89,7 @@ public class Console {
     private static void selectAngel() {
         System.out.println("Select Your Angel::");
         Database.getInstance().printDatabase();
-        if (bIsAngel) {
+        if (!bIsAngel) {
             System.out.println("No angels exist in this realm!!!");
             Display.displayMenu();
             return ;
@@ -102,15 +101,17 @@ public class Console {
         while (input.hasNextLine()) {
             String takeIn = input.nextLine();
             List<Angel> angels = Database.getInstance().extractDatabase();
-//            boolean yes = false;
+            int identical = 0;
             for (Angel a : angels) {
                 if (a.getName().equals(takeIn)) {
                     angel = Database.getInstance().angelDetails(a.getName());
                     squareMap = MapFactory.generateMap(angel);
                     moveAngel();
-//                    yes = true;
+                    identical = 1;
                 }
             }
+            if (identical == 1)
+                System.out.println("::Choose What Is Given Or Create Your Own!!!");
         }
     }
 
@@ -119,10 +120,10 @@ public class Console {
         Scanner input = new Scanner(System.in);
         while (input.hasNextLine()) {
             String takeIn = input.nextLine();
-            if (takeIn.equals("1") || takeIn.equals("2") || takeIn.equals("3") || takeIn.equals("4")) {
-                Integer choice = Integer.parseInt(takeIn);
-                GameManager.move(choice);
-//                GameManager.win();
+            Integer v = Integer.parseInt(takeIn);
+            if (v.equals(1) || v.equals(2) || v.equals(3) || v.equals(4)) {
+                GameManager.move(v);
+                GameManager.win();
             } else if (takeIn.equals("5")) {
                 System.out.println("::Level -- " + angel.getLevel());
                 System.out.println("::XP -- " + angel.getXp());

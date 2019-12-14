@@ -9,7 +9,7 @@ import view.SquareMap;
 @Setter
 public abstract class Angel extends Entity {
 
-//    private int xp; (check other class if all else fails)
+    private int xp; //(check other class if all else fails)
     private SquareMap seer;
 
     Angel(){
@@ -25,7 +25,7 @@ public abstract class Angel extends Entity {
         seer = squareMap;
     }
 
-    public void updateMap() {
+    private void updateMap() {
         seer.updateAngelPosition();
     }
 
@@ -63,14 +63,23 @@ public abstract class Angel extends Entity {
             else if (str.equals("Cherub"))
                 System.out.println(this.name + ":: Oh dear me!!");
 
-            if (str.equals("Archangel")) {
+            //just to see how it works
+//            if (str.equals("Archangel")) {
+//                xpEarned = 750;
+//                this.xp += xpEarned;
+//            } else if (str.equals("Seraph")) {
+//                xpEarned = 500;
+//                this.xp += xpEarned;
+//            } else if (str.equals("Cherub")) {
+//                xpEarned = 250;
+//                this.xp += xpEarned;
+//            }
+
+            if (str.equals("Lilith")) {
                 xpEarned = 750;
                 this.xp += xpEarned;
-            } else if (str.equals("Seraph")) {
+            } else if (str.equals("Dracula")) {
                 xpEarned = 500;
-                this.xp += xpEarned;
-            } else if (str.equals("Cherub")) {
-                xpEarned = 250;
                 this.xp += xpEarned;
             }
 

@@ -10,9 +10,9 @@ import static model.Universal.*;
 
 @Getter
 public class SquareMap {
-    private int[]oldPos = new int[]{-1, -1};
     private int [][]map;
     public int mapSize;
+    private int[]oldPos = new int[]{-1, -1};
     private Angel angel;
 
     public SquareMap(int mapSize){
@@ -58,7 +58,7 @@ public class SquareMap {
             for (int t = 0; t < mapSize; t++) {
                 if (map[v][t] != 1) {
                     int ran = new Random().nextInt(3);
-                    if (ran == 0)
+                    if (ran == 1)
                         map[v][t] = 2;
                 }
             }
