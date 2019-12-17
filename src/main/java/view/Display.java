@@ -25,8 +25,8 @@ public class Display {
     }
 
     public static void displaySurvival() {
-        System.out.println("Fight");
-        System.out.println("Run");
+        System.out.println("1) Fight");
+        System.out.println("2) Run");
     }
 }
 

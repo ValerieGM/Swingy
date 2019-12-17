@@ -2,14 +2,18 @@ package model.entities.angels;
 
 import lombok.Getter;
 import lombok.Setter;
+import model.Print;
 import model.entities.Entity;
+import model.entities.demons.Lilith;
 import view.SquareMap;
+
+import java.util.Random;
 
 @Getter
 @Setter
 public abstract class Angel extends Entity {
 
-    private int xp; //(check other class if all else fails)
+    private int xp;
     private SquareMap seer;
 
     Angel(){
@@ -30,8 +34,8 @@ public abstract class Angel extends Entity {
     }
 
     public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.x += x;
+        this.y += y;
         updateMap();
     }
 
@@ -42,14 +46,23 @@ public abstract class Angel extends Entity {
         this.defense += current;
         this.hp += current;
 
-        System.out.println(this.name + " has risen. Current circle:: " + this.level);
-        System.out.println(" ::Attack: " + this.attack);
-        System.out.println(" ::Defense: " + this.defense);
-        System.out.println(" ::Hp: " + this.hp);
+        Print.print(this.name + " has risen. Current circle:: " + this.level);
+        Print.print(" ::Attack: " + this.attack);
+        Print.print(" ::Defense: " + this.defense);
+        Print.print(" ::Hp: " + this.hp);
     }
 
     public void attack(Entity entity) {
-        System.out.println();
+        Print.print(this.getName() + "is attacking");
+
+        int highLevel = 0;
+        if (this.getType().equals("Lilith")){
+            int rand = new Random().nextInt(4);
+            if (rand == 3){
+                Print.print("High Level Hit!!!");
+                highLevel = this.level * 2;
+            }
+        }
 
         entity.defend(this, this.attack);
         if (entity.getHp() <= 0) {
@@ -57,23 +70,23 @@ public abstract class Angel extends Entity {
 
             String str = this.getType();
             if (str.equals("Archangel"))
-                System.out.println(this.name + ":: Such a rush!!");
+                Print.print(this.name + ":: Such a rush!!");
             else if (str.equals("Seraph"))
-                System.out.println(this.name + ":: Back from hence you came!!");
+                Print.print(this.name + ":: Back from hence you came!!");
             else if (str.equals("Cherub"))
-                System.out.println(this.name + ":: Oh dear me!!");
+                Print.print(this.name + ":: Oh dear me!!");
 
             //just to see how it works
-//            if (str.equals("Archangel")) {
-//                xpEarned = 750;
-//                this.xp += xpEarned;
-//            } else if (str.equals("Seraph")) {
-//                xpEarned = 500;
-//                this.xp += xpEarned;
-//            } else if (str.equals("Cherub")) {
-//                xpEarned = 250;
-//                this.xp += xpEarned;
-//            }
+            if (str.equals("Archangel")) {
+                xpEarned = 750;
+                this.xp += xpEarned;
+            } else if (str.equals("Seraph")) {
+                xpEarned = 500;
+                this.xp += xpEarned;
+            } else if (str.equals("Cherub")) {
+                xpEarned = 250;
+                this.xp += xpEarned;
+            }
 
             if (str.equals("Lilith")) {
                 xpEarned = 750;
@@ -83,20 +96,20 @@ public abstract class Angel extends Entity {
                 this.xp += xpEarned;
             }
 
-            System.out.println("You earned " + xpEarned + "xp");
+            Print.print("You earned " + xpEarned + "xp");
             if (this.xp >= (this.level * 1000 + Math.pow(this.level - 1, 2) * 450))
                 riseUp();
         }
     }
 
     public void defend (Entity entity, int damage) {
-        int realDamage = damage - this.defense;
+        int finalDamage = damage - this.defense;
 
-        if (realDamage <= 0)
-            realDamage = 1;
-        this.hp -= realDamage;
-        System.out.println(entity.getName() + " inflicted " + realDamage + "harm to " + this.name);
+        if (finalDamage <= 0)
+            finalDamage = 1;
+        this.hp -= finalDamage;
+        Print.print(entity.getName() + " inflicted " + finalDamage + "harm to " + this.name);
         if (this.hp <= 0)
-            System.out.println(this.name + " has been smote!!!");
+            Print.print(this.name + " has been smote!!!");
     }
 }

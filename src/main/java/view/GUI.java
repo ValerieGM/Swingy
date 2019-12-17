@@ -82,7 +82,7 @@ public class  GUI  extends JFrame {
     public GUI() {
         setTitle("Swingy");
         setSize(1300, 800);
-        setResizable(false);
+        setResizable(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,7 +94,7 @@ public class  GUI  extends JFrame {
         this.setVisible(true);
     }
 
-    private void begin(GUI window){
+    public void begin(GUI window){
         panelMenu.add(buttonCreate);
         panelMenu.add(buttonSelect);
         panelMenu.add(buttonChange);
@@ -104,7 +104,7 @@ public class  GUI  extends JFrame {
         panelMenu.add(panelSelect);
         panelMenu.add(panelEncounter);
 
-//        panelMenu.add(scrollPane);
+        panelMenu.add(scrollPane);
         panelMenu.add(picLabel);
         panelMenu.add(panelGrid);
         panelMenu.add(buttonCancelMain);
@@ -147,7 +147,7 @@ public class  GUI  extends JFrame {
         //Button Initialisations
         buttonCreate.setPreferredSize(new Dimension(180, 90));
         buttonCreate.addActionListener(new createListener());
-        buttonSelect.setPreferredSize(new Dimension(180, 90));
+        buttonSelect.setPreferredSize(new Dimension(180, 100));
         buttonSelect.addActionListener(new selectListener());
         buttonChange.setPreferredSize(new Dimension(180, 90));
         buttonChange.addActionListener(new changeListener());
@@ -158,7 +158,7 @@ public class  GUI  extends JFrame {
         buttonCreate2.setMaximumSize(getSize());
 
         buttonOkEncounter.setPreferredSize(new Dimension(180, 30));
-//        buttonOkEncounter.addActionListener(new angelEncounterListener());
+        buttonOkEncounter.addActionListener(new angelEncounterListener());
         buttonOkEncounter.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonOkEncounter.setMaximumSize(getSize());
 
@@ -272,6 +272,12 @@ public class  GUI  extends JFrame {
                         else if ((y + 1) < squareMap.getMapSize() && squareMap.getMap()[x][y + 1] == 1)
                             GameManager.move(4);
 
+                        if (bEncounterPhase) {
+                            panelEncounter.setVisible(true);
+                            bEncounterPhase = false;
+                        } else
+                            GameManager.win();
+
                         panelGrid.removeAll();
                         grid.setRows(squareMap.getMapSize());
                         grid.setColumns(squareMap.getMapSize());
@@ -334,6 +340,7 @@ public class  GUI  extends JFrame {
 
     private class selectListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            Database.getInstance().printDatabase();
             if (!bIsAngel)
                 logTextArea.setText("Angels Don't Exist");
             else {
@@ -405,6 +412,37 @@ public class  GUI  extends JFrame {
             buttonCancelMain.setVisible(true);
             //Map Functionality
             map();
+        }
+    }
+
+    private class angelEncounterListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            buttonCancelMain.setVisible(false);
+            if (rBattle.isSelected())
+                GameManager.battle(2);
+            else if (rFlee.isSelected())
+                GameManager.flee();
+            GameManager.win();
+
+            panelGrid.removeAll();
+            grid.setRows(squareMap.getMapSize());
+            grid.setColumns(squareMap.getMapSize());
+            grid.setHgap(-1);
+            grid.setVgap(-1);
+            panelGrid.setLayout(grid);
+            map();
+            panelGrid.revalidate();
+            panelGrid.repaint();
+
+            buttonCancelMain.setVisible(true);
+            labelStats.setText("<html>Name: " + angel.getName() + "<br>" +
+                    "Type: " + angel.getType() + "<br>" +
+                    "Level: " + angel.getLevel() + "<br>" +
+                    "Experience: " + angel.getXp() + "<br>" +
+                    "Attack: " + angel.getAttack() + "<br>" +
+                    "Defense: " + angel.getDefense() + "<br>" +
+                    "Health: " + angel.getHp() + "<br>" + "</html>");
+            panelEncounter.setVisible(false);
         }
     }
 

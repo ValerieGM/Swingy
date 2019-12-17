@@ -1,6 +1,7 @@
 controller/GameManager.class
 view/GUI$createListener.class
 controller/MapFactory.class
+model/Print.class
 view/GUI$changeListener.class
 controller/Main.class
 view/GUI$deleteListener.class

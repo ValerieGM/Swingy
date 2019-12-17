@@ -1,5 +1,6 @@
 package controller;
 
+import model.Print;
 import model.entities.demons.Demon;
 import model.entities.demons.Dracula;
 import view.Console;
@@ -19,7 +20,7 @@ public class GameManager {
     public static void win() {
         if (angel.getX() == squareMap.getMapSize() - 1 || angel.getY() == squareMap.getMapSize() - 1 ||
                 angel.getX() == 0 || angel.getY() == 0) {
-            System.out.println("Quest Complete!!!");
+            Print.print("Quest Complete!!!");
             squareMap = MapFactory.generateMap(angel);
             if (!bIsGUI)
                 Console.moveAngel();
@@ -33,9 +34,9 @@ public class GameManager {
         if (!bIsGUI) {
             while (input.hasNextLine()) {
                 String takeIn = input.nextLine();
-                Integer v  = Integer.getInteger(takeIn);
-                if (v.equals(1) || v.equals(2)) {
-                    if (v.equals(1)) {
+                int v  = Integer.parseInt(takeIn);
+                if (v == 1 || v == 2) {
+                    if (v == 1) {
                         battle(2);
                         return;
                     } else {
@@ -43,7 +44,7 @@ public class GameManager {
                         return;
                     }
                 } else {
-                    System.out.println("Choose what is given, not what you desire!!!");
+                    Print.print("Choose what is given, not what you desire!!!");
                     Display.displaySurvival();
                 }
             }
@@ -53,6 +54,7 @@ public class GameManager {
 
     public static void battle(int v) {
         if (v == 1 ) {
+            Print.print(demon.getName() + " attacks!!");
             while (angel.getHp() > 0 && demon.getHp() > 0) {
                 demon.attack(angel);
                 //demon.attack(angel);
@@ -60,6 +62,7 @@ public class GameManager {
                     angel.attack(demon);
             }
         } else {
+            Print.print(angel.getName() + " attacks!!");
             while (angel.getHp() > 0 && demon.getHp() > 0) {
                 angel.attack(demon);
                 angel.attack(demon);
@@ -76,8 +79,7 @@ public class GameManager {
         else if (demon.getHp() <= 0) {
             Database.getInstance().updateAngel(angel);
             angel.setPosition(0, 0);
-            System.out.println("" +
-                    "Quest Success!!!!");
+            Print.print("Quest Successfully Completed!!!!");
         }
     }
 
@@ -117,7 +119,7 @@ public class GameManager {
             oldMove[1] = -1;
         }
 
-        // battle or flee
+        // Demon encounter
         if (squareMap.getMap()[angel.getX()][angel.getY()] == 8) {
             bFightPhase = true;
             int ran = new Random().nextInt(3);
@@ -125,7 +127,7 @@ public class GameManager {
                 demon = (Demon) newDemon(angel, "Dracula");
             else
                 demon = (Demon) newDemon(angel, "Lilith");
-            System.out.println("");
+            System.out.println("Demon Approached:: " + demon.getName() + " of level " + demon.getLevel());
             battleOrFlee();
         }
     }

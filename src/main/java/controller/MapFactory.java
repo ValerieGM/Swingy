@@ -1,5 +1,6 @@
 package controller;
 
+import model.Print;
 import model.entities.Entity;
 import view.SquareMap;
 
@@ -11,7 +12,7 @@ public class MapFactory {
             mapSize = 19;
         SquareMap squareMap = new SquareMap(mapSize);
         squareMap.registerAngel(angel);
-        System.out.println(angel.getName() + " is here ");
+        Print.print(angel.getName() + " is here ");
         squareMap.spawnDemons();
         return (squareMap);
     }

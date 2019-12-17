@@ -35,7 +35,7 @@ public class Console {
                 else if (v == 3) {
                     bIsGUI = true;
                     GUI gui = new GUI();
-                    break;
+                    return;
                 }
                 else {
                     System.out.println("Goodbye!!!");

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controller.EntityFactory;
+import model.Print;
 import model.entities.angels.*;
 
 import static model.Universal.bIsAngel;
@@ -39,16 +40,16 @@ public class Database {
                     dbAttack + "," + dbDefense + "," +
                     dbHP + ") VALUES(?,?,?,?,?,?,?)";
 
-    private  static final String updateAngelTable =
-            String.format("UPDATE %sSET%s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, ",
-                    angelTable, dbName, dbType, dbLevel, dbXP, dbAttack, dbDefense, dbHP);
+    private  static final String updateAngelTable = "UPDATE " + angelTable + " SET " +
+            dbLevel + " = ? , " + dbXP + " = ? , " + dbAttack + " = ? , " + dbDefense + " = ? ," +
+            dbHP + " = ? " + " WHERE " + dbName + " = ?";
 
     private static final String getAngelTable =
             "SELECT * FROM " + angelTable;
 
     private static final String getAngelData =
             "SELECT * FROM " + angelTable +
-                    " WHERE " + dbName + " =?";
+                    " WHERE " + dbName + " = ?";
 
     private static final String deleteAngelTable =
             "DELETE from " + angelTable + " WHERE " + dbName + " = ?";
@@ -82,20 +83,21 @@ public class Database {
             statement.executeUpdate(createAngelTable);
             System.out.println("Database Connection Created");
         } catch(Exception e) {
-            System.err.println("dbConnect:: " + e.getMessage());
+            Print.print("dbConnect:: " + e.getClass() + ":: " + e.getMessage());
             System.exit(0);
+        } finally {
+            close();
         }
         return (connection);
     }
 
     //insert into database
     public void insertAngel(Angel angel) {
-        System.out.println(angel);
         try {
             connection = this.dbConnect();
             //check for duplicates before insertion
             if (duplicateAngel(connection, angel))
-                System.out.println("Can't be duplicating perfection now can we?!?!");
+                Print.print("Can't be duplicating perfection now can we?!?!");
             else {
                 prepared = connection.prepareStatement(insertAngelTable);
                 prepared.setString(1, angel.getName());
@@ -109,7 +111,9 @@ public class Database {
                 System.out.println("Database: ** " + angel.getName() + " ** Created");
             }
         } catch (SQLException | IndexOutOfBoundsException e) { //IOException
-            System.err.println("Insert:: SQLite Error: " + e.getMessage());
+            Print.print("Insert:: SQLite Error: " + e.getMessage());
+        } finally {
+            close();
         }
     }
     //duplicate angels
@@ -137,8 +141,10 @@ public class Database {
             prepared.executeUpdate();
             System.out.println("Database Updated");
         } catch (SQLException e) {
-            System.out.println("UpdateAngel:: SQL Exception : " + e.getMessage());
+            Print.print("UpdateAngel:: SQL Exception : " + e.getMessage());
             System.exit(0);
+        } finally {
+            close();
         }
     }
 
@@ -151,8 +157,10 @@ public class Database {
             prepared.executeUpdate();
             System.out.println("Angel Destroyed");
         } catch (SQLException e) {
-            System.out.println("Delete:: SQL exception : " + e.getMessage());
+            Print.print("Delete:: SQL exception : " + e.getMessage());
             System.exit(0);
+        } finally {
+            close();
         }
     }
 
@@ -171,13 +179,15 @@ public class Database {
                         .append("XP: ").append(resultSet.getString(dbXP)).append("\n")
                         .append("Attack: ").append(resultSet.getString(dbAttack)).append("\n")
                         .append("Defense: ").append(resultSet.getString(dbDefense)).append("\n")
-                        .append("HP: ").append(resultSet.getString(dbHP)).append("\n");
+                        .append("HP: ").append(resultSet.getString(dbHP)).append("\n\n");
                 nbAngel += 1;
             }
-            System.out.println(string.toString());
+            Print.print(string.toString());
         } catch (Exception e) {
-            System.out.println("PrintDB: " + e.getMessage());
+            Print.print("PrintDB: " + e.getMessage());
             System.exit(0);
+        } finally {
+            close();
         }
     }
 
@@ -206,8 +216,10 @@ public class Database {
                 angel.setHp(resultSet.getInt(dbHP));
             }
         }catch (Exception e) {
-            System.out.println("AngelDetails: " + e.getMessage());
+            Print.print("AngelDetails: " + e.getMessage());
             System.exit(0);
+        } finally {
+            close();
         }
         return angel;
     }
@@ -243,9 +255,29 @@ public class Database {
             }
             return angelList;
         } catch (Exception e) {
-            System.out.println("ExtractDatabase: " + e.getMessage());
+            Print.print("ExtractDatabase: " + e.getMessage());
             System.exit(0);
+        } finally {
+            close();
         }
         return null;
+    }
+
+    //close all statements, etc
+
+    private void close() {
+        try {
+            if (resultSet != null && !resultSet.isClosed())
+                resultSet.close();
+            if (statement != null && !statement.isClosed())
+                statement.close();
+            if (prepared != null && !prepared.isClosed())
+                prepared.close();
+//            if (connection != null && !connection.isClosed())
+//                connection.close();
+        }catch (Exception e) {
+            Print.print("Close Function:: " + e.getClass() + ":: " + e.getMessage());
+            System.exit(0);
+        }
     }
 }
