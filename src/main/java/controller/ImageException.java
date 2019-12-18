@@ -1,5 +1,7 @@
 package controller;
 
+import model.helpers.View;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,7 +13,7 @@ public class ImageException {
         try {
             image = ImageIO.read(new File(url));
         } catch(IOException e) {
-            System.out.println("Unable To Read Image");
+            View.print("Unable To Read Image");
             System.exit(0);
         }
         return image;

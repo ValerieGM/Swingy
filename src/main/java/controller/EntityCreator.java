@@ -4,7 +4,7 @@ import model.entities.Entity;
 import model.entities.angels.*;
 import model.entities.demons.*;
 
-public class EntityFactory {
+public class EntityCreator {
     private static Entity entity;
 
     public static Entity newAngel(String name, String type) {

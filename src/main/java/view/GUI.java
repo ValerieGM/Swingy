@@ -1,13 +1,12 @@
 package view;
 
-import controller.EntityFactory;
+import controller.EntityCreator;
 import controller.GameManager;
-import controller.MapFactory;
-import jdk.nashorn.internal.scripts.JO;
+import controller.MapCreator;
 import model.database.Database;
 import model.entities.Entity;
 import model.entities.angels.Angel;
-import model.entities.angels.Cherub;
+import model.helpers.View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +15,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.sql.SQLException;
 import java.util.List;
 
-import static model.Universal.*;
+import static model.helpers.Universal.*;
 
 public class  GUI  extends JFrame {
 
@@ -76,12 +74,9 @@ public class  GUI  extends JFrame {
     //Scrolling Capabilities
     private JScrollPane scrollPane;
 
-    //Images To Be Used
-    private Image scaledImage;
-
     public GUI() {
         setTitle("Swingy");
-        setSize(1300, 800);
+        setSize(1300, 950);
         setResizable(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -113,6 +108,8 @@ public class  GUI  extends JFrame {
         panelMain.add(panelMenu, BorderLayout.WEST);
         panelMain.add(panelMenu, BorderLayout.CENTER);
 
+        scrollPane.setVisible(false);
+
         window.setContentPane(panelMain);
     }
 
@@ -125,7 +122,8 @@ public class  GUI  extends JFrame {
 
         //Reading Image Files::  BufferedImage img = ImageIO.read(url);
         BufferedImage mainImage = controller.ImageException.imageUpload("src/main/java/view/images/game.png");
-        scaledImage = mainImage.getScaledInstance(window.getWidth() / 2 , window.getHeight(),Image.SCALE_DEFAULT );
+        //Images To Be Used
+        Image scaledImage = mainImage.getScaledInstance(window.getWidth() / 2, window.getHeight(), Image.SCALE_DEFAULT);
         picLabel = new JLabel(new ImageIcon(scaledImage));
 
         //Panel Initialisations
@@ -147,7 +145,7 @@ public class  GUI  extends JFrame {
         //Button Initialisations
         buttonCreate.setPreferredSize(new Dimension(180, 90));
         buttonCreate.addActionListener(new createListener());
-        buttonSelect.setPreferredSize(new Dimension(180, 100));
+        buttonSelect.setPreferredSize(new Dimension(180, 90));
         buttonSelect.addActionListener(new selectListener());
         buttonChange.setPreferredSize(new Dimension(180, 90));
         buttonChange.addActionListener(new changeListener());
@@ -369,14 +367,14 @@ public class  GUI  extends JFrame {
 
     private class angelCreateListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            int selection = listSelect.getSelectedIndex();
+            int selection = listCreate.getSelectedIndex();
             Entity entity = null;
             if (selection == 0)
-                entity = EntityFactory.newAngel(input.getText(), "Archangel");
+                entity = EntityCreator.newAngel(input.getText(), "Archangel");
             else if (selection == 1)
-                entity = EntityFactory.newAngel(input.getText(), "Seraph");
+                entity = EntityCreator.newAngel(input.getText(), "Seraph");
             else if (selection == 2)
-                entity = EntityFactory.newAngel(input.getText(), "Cherub");
+                entity = EntityCreator.newAngel(input.getText(), "Cherub");
 
             if (entity != null) {
                 Database.getInstance().insertAngel((Angel) entity);
@@ -391,9 +389,10 @@ public class  GUI  extends JFrame {
     private class startListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             panelSelect.setVisible(false);
+            scrollPane.setVisible(true);
             picLabel.setVisible(false);
             angel = Database.getInstance().angelDetails(listSelect.getSelectedItem().toString());
-            squareMap = MapFactory.generateMap(angel);
+            squareMap = MapCreator.generateMap(angel);
             System.out.println(angel.getName() + " is here!!!");
             grid.setRows(squareMap.getMapSize());
             grid.setColumns(squareMap.getMapSize());

@@ -1,10 +1,8 @@
-package model;
+package model.helpers;
 
-import jdk.nashorn.internal.objects.Global;
+import static model.helpers.Universal.bIsGUI;
 
-import static model.Universal.bIsGUI;
-
-public class Print {
+public class View {
     public static void print(String text) {
         if (!bIsGUI)
             System.out.println(text);

@@ -1,4 +1,4 @@
-package model;
+package model.helpers;
 
 import javax.swing.*;
 import javax.validation.ValidatorFactory;

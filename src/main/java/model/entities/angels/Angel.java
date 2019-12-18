@@ -2,9 +2,8 @@ package model.entities.angels;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.Print;
+import model.helpers.View;
 import model.entities.Entity;
-import model.entities.demons.Lilith;
 import view.SquareMap;
 
 import java.util.Random;
@@ -46,20 +45,20 @@ public abstract class Angel extends Entity {
         this.defense += current;
         this.hp += current;
 
-        Print.print(this.name + " has risen. Current circle:: " + this.level);
-        Print.print(" ::Attack: " + this.attack);
-        Print.print(" ::Defense: " + this.defense);
-        Print.print(" ::Hp: " + this.hp);
+        View.print(this.name + " has risen. Current circle:: " + this.level);
+        View.print(" ::Attack: " + this.attack);
+        View.print(" ::Defense: " + this.defense);
+        View.print(" ::Hp: " + this.hp);
     }
 
     public void attack(Entity entity) {
-        Print.print(this.getName() + "is attacking");
+        View.print(this.getName() + "is attacking");
 
         int highLevel = 0;
         if (this.getType().equals("Lilith")){
             int rand = new Random().nextInt(4);
             if (rand == 3){
-                Print.print("High Level Hit!!!");
+                View.print("High Level Hit!!!");
                 highLevel = this.level * 2;
             }
         }
@@ -70,11 +69,11 @@ public abstract class Angel extends Entity {
 
             String str = this.getType();
             if (str.equals("Archangel"))
-                Print.print(this.name + ":: Such a rush!!");
+                View.print(this.name + ":: Such a rush!!");
             else if (str.equals("Seraph"))
-                Print.print(this.name + ":: Back from hence you came!!");
+                View.print(this.name + ":: Back from hence you came!!");
             else if (str.equals("Cherub"))
-                Print.print(this.name + ":: Oh dear me!!");
+                View.print(this.name + ":: Oh dear me!!");
 
             //just to see how it works
             if (str.equals("Archangel")) {
@@ -96,7 +95,7 @@ public abstract class Angel extends Entity {
                 this.xp += xpEarned;
             }
 
-            Print.print("You earned " + xpEarned + "xp");
+            View.print("You earned " + xpEarned + "xp");
             if (this.xp >= (this.level * 1000 + Math.pow(this.level - 1, 2) * 450))
                 riseUp();
         }
@@ -108,8 +107,8 @@ public abstract class Angel extends Entity {
         if (finalDamage <= 0)
             finalDamage = 1;
         this.hp -= finalDamage;
-        Print.print(entity.getName() + " inflicted " + finalDamage + "harm to " + this.name);
+        View.print(entity.getName() + " inflicted " + finalDamage + "harm to " + this.name);
         if (this.hp <= 0)
-            Print.print(this.name + " has been smote!!!");
+            View.print(this.name + " has been smote!!!");
     }
 }

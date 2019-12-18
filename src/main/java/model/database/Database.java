@@ -4,17 +4,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.EntityFactory;
-import model.Print;
+import controller.EntityCreator;
+import model.helpers.View;
 import model.entities.angels.*;
 
-import static model.Universal.bIsAngel;
-import static model.Universal.nbAngel;
+import static model.helpers.Universal.bIsAngel;
+import static model.helpers.Universal.nbAngel;
 
 public class Database {
 
     //database variables
-    private static final String databaseName = "swingy.db";
+    private static Database database;
+    private Statement statement;
+    private Connection connection;
+
+    private PreparedStatement prepared;
+    private ResultSet resultSet;
+
     private static final String angelTable = "angels";
     private static final String dbId = "id";
     private static final String dbName = "name";
@@ -54,16 +60,6 @@ public class Database {
     private static final String deleteAngelTable =
             "DELETE from " + angelTable + " WHERE " + dbName + " = ?";
 
-    private static final String sqlDriver = "org.sqlite.JDBC";
-    private static final String sqlURL = "jdbc:sqlite:" + databaseName;
-
-    private static Database database;
-    private Statement statement;
-    private Connection connection;
-
-    private PreparedStatement prepared;
-    private ResultSet resultSet;
-
     //Functions
 
     //get instance of the database (synchronization look-up)
@@ -78,12 +74,11 @@ public class Database {
     private Connection dbConnect() {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection(sqlURL);
+            connection = DriverManager.getConnection("jdbc:sqlite:swingy.db");
             statement = connection.createStatement();
             statement.executeUpdate(createAngelTable);
-            System.out.println("Database Connection Created");
         } catch(Exception e) {
-            Print.print("dbConnect:: " + e.getClass() + ":: " + e.getMessage());
+            View.print("dbConnect:: " + e.getClass() + ":: " + e.getMessage());
             System.exit(0);
         } finally {
             close();
@@ -97,7 +92,7 @@ public class Database {
             connection = this.dbConnect();
             //check for duplicates before insertion
             if (duplicateAngel(connection, angel))
-                Print.print("Can't be duplicating perfection now can we?!?!");
+                View.print("Can't be duplicating perfection now can we?!?!");
             else {
                 prepared = connection.prepareStatement(insertAngelTable);
                 prepared.setString(1, angel.getName());
@@ -110,19 +105,23 @@ public class Database {
                 prepared.executeUpdate();
                 System.out.println("Database: ** " + angel.getName() + " ** Created");
             }
-        } catch (SQLException | IndexOutOfBoundsException e) { //IOException
-            Print.print("Insert:: SQLite Error: " + e.getMessage());
+        } catch (Exception e) {
+            View.print("InsertAngel:: " + e.getClass() +":: " + e.getMessage());
         } finally {
             close();
         }
     }
     //duplicate angels
-    private boolean duplicateAngel(Connection connection, Angel angel) throws SQLException{
-        statement = connection.createStatement();
-        resultSet = statement.executeQuery(getAngelTable);
-        while (resultSet.next()) {
-            if(angel.getName().equals(resultSet.getString(dbName)))
-                return true;
+    private boolean duplicateAngel(Connection connection, Angel angel){
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(getAngelTable);
+            while (resultSet.next()) {
+                if (angel.getName().equals(resultSet.getString(dbName)))
+                    return true;
+            }
+        } catch (Exception e) {
+            View.print("DuplicateAngel:: " + e.getClass() + ":: " + e.getMessage());
         }
         return false;
     }
@@ -139,9 +138,8 @@ public class Database {
             prepared.setInt(5, angel.getHp());
             prepared.setString(6, angel.getName());
             prepared.executeUpdate();
-            System.out.println("Database Updated");
-        } catch (SQLException e) {
-            Print.print("UpdateAngel:: SQL Exception : " + e.getMessage());
+        } catch (Exception e) {
+            View.print("UpdateAngel:: SQL Exception : " + e.getClass() + ":: " + e.getMessage());
             System.exit(0);
         } finally {
             close();
@@ -155,9 +153,8 @@ public class Database {
             prepared = connection.prepareStatement(deleteAngelTable);
             prepared.setString(1, input);
             prepared.executeUpdate();
-            System.out.println("Angel Destroyed");
-        } catch (SQLException e) {
-            Print.print("Delete:: SQL exception : " + e.getMessage());
+        } catch (Exception e) {
+            View.print("Delete:: SQL exception : " + e.getClass() + "::" +  e.getMessage());
             System.exit(0);
         } finally {
             close();
@@ -182,9 +179,9 @@ public class Database {
                         .append("HP: ").append(resultSet.getString(dbHP)).append("\n\n");
                 nbAngel += 1;
             }
-            Print.print(string.toString());
+            View.print(string.toString());
         } catch (Exception e) {
-            Print.print("PrintDB: " + e.getMessage());
+            View.print("PrintDB: " + e.getClass() + "::" + e.getMessage());
             System.exit(0);
         } finally {
             close();
@@ -202,11 +199,11 @@ public class Database {
 
             if(resultSet.next()) {
                 if (resultSet.getString(dbType).equals("Archangel"))
-                    angel = (Angel) EntityFactory.newAngel(name, "Archangel");
+                    angel = (Angel) EntityCreator.newAngel(name, "Archangel");
                 else if (resultSet.getString(dbType).equals("Cherubim"))
-                    angel = (Angel)EntityFactory.newAngel(name, "Cherubim");
+                    angel = (Angel) EntityCreator.newAngel(name, "Cherubim");
                 else if (resultSet.getString(dbType).equals("Seraph"))
-                    angel = (Angel)EntityFactory.newAngel(name, "Seraph");
+                    angel = (Angel) EntityCreator.newAngel(name, "Seraph");
 
                 assert angel != null;
                 angel.setLevel(resultSet.getInt(dbLevel));
@@ -216,7 +213,7 @@ public class Database {
                 angel.setHp(resultSet.getInt(dbHP));
             }
         }catch (Exception e) {
-            Print.print("AngelDetails: " + e.getMessage());
+            View.print("AngelDetails: " + e.getClass() + ":: " + e.getMessage());
             System.exit(0);
         } finally {
             close();
@@ -255,7 +252,7 @@ public class Database {
             }
             return angelList;
         } catch (Exception e) {
-            Print.print("ExtractDatabase: " + e.getMessage());
+            View.print("ExtractDatabase: " + e.getClass() + ":: " + e.getMessage());
             System.exit(0);
         } finally {
             close();
@@ -273,10 +270,8 @@ public class Database {
                 statement.close();
             if (prepared != null && !prepared.isClosed())
                 prepared.close();
-//            if (connection != null && !connection.isClosed())
-//                connection.close();
         }catch (Exception e) {
-            Print.print("Close Function:: " + e.getClass() + ":: " + e.getMessage());
+            View.print("Close Function:: " + e.getClass() + ":: " + e.getMessage());
             System.exit(0);
         }
     }

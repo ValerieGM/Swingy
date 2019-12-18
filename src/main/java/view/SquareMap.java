@@ -6,7 +6,7 @@ import model.entities.Entity;
 
 import java.util.Random;
 
-import static model.Universal.*;
+import static model.helpers.Universal.*;
 
 @Getter
 public class SquareMap {
