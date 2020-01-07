@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import model.helpers.View;
 import model.entities.Entity;
-import view.SquareMap;
+import view.Map;
 
 import java.util.Random;
 
@@ -13,7 +13,7 @@ import java.util.Random;
 public abstract class Angel extends Entity {
 
     private int xp;
-    private SquareMap seer;
+    private Map seer;
 
     Angel(){
     }
@@ -24,8 +24,8 @@ public abstract class Angel extends Entity {
         this.xp = 0;
     }
 
-    public void register(SquareMap squareMap) {
-        seer = squareMap;
+    public void register(Map map) {
+        seer = map;
     }
 
     private void updateMap() {

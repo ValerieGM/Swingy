@@ -1,7 +1,6 @@
 package model.helpers;
 
 import javax.swing.*;
-import javax.validation.ValidatorFactory;
 
 import model.entities.angels.Angel;
 import model.entities.demons.Demon;
@@ -17,6 +16,6 @@ public class Universal {
 
     public static Angel angel;
     public static Demon demon;
-    public static SquareMap squareMap;
+    public static Map map;
     public static JTextArea logTextArea;
 }

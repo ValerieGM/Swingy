@@ -17,14 +17,14 @@ public class GameManager {
     private static int[] oldMove = new int[2];
 
     public static void win() {
-        if (angel.getX() == squareMap.getMapSize() - 1 || angel.getY() == squareMap.getMapSize() - 1 ||
+        if (angel.getX() == map.getMapSize() - 1 || angel.getY() == map.getMapSize() - 1 ||
                 angel.getX() == 0 || angel.getY() == 0) {
             View.print("Quest Complete!!!");
             double xpSum = angel.getLevel() * 1000 + Math.pow(angel.getLevel() - 1, 2) * 450;
 
             int xp = (int) Math.round(xpSum);
             angel.setXp(xp);
-            squareMap = MapCreator.generateMap(angel);
+            map = MapCreator.generateMap(angel);
             if (!bIsGUI)
                 Console.moveAngel();
         }
@@ -123,7 +123,7 @@ public class GameManager {
         }
 
         // Demon encounter
-        if (squareMap.getMap()[angel.getX()][angel.getY()] == 8) {
+        if (map.getMap()[angel.getX()][angel.getY()] == 8) {
             bFightPhase = true;
             int ran = new Random().nextInt(3);
             if (ran == 3)

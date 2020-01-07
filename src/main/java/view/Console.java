@@ -111,7 +111,7 @@ public class Console {
             for (Angel a : angels) {
                 if (a.getName().equals(takeIn)) {
                     angel = Database.getInstance().angelDetails(a.getName());
-                    squareMap = MapCreator.generateMap(angel);
+                    map = MapCreator.generateMap(angel);
                     moveAngel();
                     identical = 1;
                 }

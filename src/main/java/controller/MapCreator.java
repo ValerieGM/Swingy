@@ -2,18 +2,18 @@ package controller;
 
 import model.helpers.View;
 import model.entities.Entity;
-import view.SquareMap;
+import view.Map;
 
 public class MapCreator {
-    public static SquareMap generateMap(Entity angel) {
+    public static Map generateMap(Entity angel) {
         int mapSize = (angel.getLevel() -1) * 5 + 10 - (angel.getLevel() % 2);
 
         if (mapSize > 19)
             mapSize = 19;
-        SquareMap squareMap = new SquareMap(mapSize);
-        squareMap.registerAngel(angel);
+        Map map = new Map(mapSize);
+        map.registerAngel(angel);
         View.print(angel.getName() + " is here ");
-        squareMap.spawnDemons();
-        return (squareMap);
+        map.spawnDemons();
+        return (map);
     }
 }

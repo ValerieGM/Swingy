@@ -6,7 +6,6 @@ import controller.MapCreator;
 import model.database.Database;
 import model.entities.Entity;
 import model.entities.angels.Angel;
-import model.helpers.View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -237,12 +236,12 @@ public class  GUI  extends JFrame {
     //Map Controller
     private void map() {
         int v = 0;
-        while (v < squareMap.getMapSize()) {
+        while (v < map.getMapSize()) {
             int t = 0;
-            while (t < squareMap.getMapSize()) {
+            while (t < map.getMapSize()) {
                 final int x = t;
                 final int y = v;
-                int position = squareMap.getMap()[t][v];
+                int position = map.getMap()[t][v];
 
                 final JPanel block = new JPanel();
                 ((FlowLayout)block.getLayout()).setHgap(0);
@@ -261,13 +260,13 @@ public class  GUI  extends JFrame {
                 block.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if ((x + 1) < squareMap.getMapSize() && squareMap.getMap()[x + 1][y] == 1)
+                        if ((x + 1) < map.getMapSize() && map.getMap()[x + 1][y] == 1)
                             GameManager.move(1);
-                        else if ((y - 1) >= 0 && squareMap.getMap()[x][y - 1] == 1)
+                        else if ((y - 1) >= 0 && map.getMap()[x][y - 1] == 1)
                             GameManager.move(2);
-                        else if ((x - 1) <= 0 && squareMap.getMap()[x - 1][y] == 1)
+                        else if ((x - 1) <= 0 && map.getMap()[x - 1][y] == 1)
                             GameManager.move(3);
-                        else if ((y + 1) < squareMap.getMapSize() && squareMap.getMap()[x][y + 1] == 1)
+                        else if ((y + 1) < map.getMapSize() && map.getMap()[x][y + 1] == 1)
                             GameManager.move(4);
 
                         if (bEncounterPhase) {
@@ -277,8 +276,8 @@ public class  GUI  extends JFrame {
                             GameManager.win();
 
                         panelGrid.removeAll();
-                        grid.setRows(squareMap.getMapSize());
-                        grid.setColumns(squareMap.getMapSize());
+                        grid.setRows(map.getMapSize());
+                        grid.setColumns(map.getMapSize());
                         grid.setHgap(-1);
                         grid.setVgap(-1);
                         panelGrid.setLayout(grid);
@@ -392,10 +391,10 @@ public class  GUI  extends JFrame {
             scrollPane.setVisible(true);
             picLabel.setVisible(false);
             angel = Database.getInstance().angelDetails(listSelect.getSelectedItem().toString());
-            squareMap = MapCreator.generateMap(angel);
+            map = MapCreator.generateMap(angel);
             System.out.println(angel.getName() + " is here!!!");
-            grid.setRows(squareMap.getMapSize());
-            grid.setColumns(squareMap.getMapSize());
+            grid.setRows(map.getMapSize());
+            grid.setColumns(map.getMapSize());
             grid.setHgap(-1);
             grid.setVgap(-1);
             panelGrid.setVisible(true);
@@ -424,8 +423,8 @@ public class  GUI  extends JFrame {
             GameManager.win();
 
             panelGrid.removeAll();
-            grid.setRows(squareMap.getMapSize());
-            grid.setColumns(squareMap.getMapSize());
+            grid.setRows(map.getMapSize());
+            grid.setColumns(map.getMapSize());
             grid.setHgap(-1);
             grid.setVgap(-1);
             panelGrid.setLayout(grid);
